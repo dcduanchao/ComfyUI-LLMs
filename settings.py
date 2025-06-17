@@ -30,6 +30,14 @@ DEFAULT_SETTINGS = {
                 "api_key": "AIxxxxxx",
                 "model_list": ["gemini-pro-vision"]
             }
+        },
+        "example_user_prompt": "your user prompt here",
+        "prompt_templates": {
+            "default": {
+                "system": "act as prompt generator, I will give you text and you describe an image that matches that text in details, answer with one response only.if I input in Chinese to communicate with you, but it is crucial that your response be in English.",
+                "prefix": "make a list of the things you see. do not explain why you see them.",
+                "suffix": "describe what you see in your mind."
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ import torch
 from PIL import Image
 import io
 import base64
+# 导入统一的配置加载函数
+from .settings import load_settings
 
 class LLMs_Vision_Unified:
     """统一的视觉模型节点"""
@@ -14,14 +16,14 @@ class LLMs_Vision_Unified:
         self.config = self._load_config()
         self.model_lists = {}
         # 预先加载所有模型类型的子模型列表
-        for model_type in self.config['chatllmleoleexh']['vision_models']:
-            self.model_lists[model_type] = self.config['chatllmleoleexh']['vision_models'][model_type]['model_list']
+        for model_type in self.config['vision_models']:
+            self.model_lists[model_type] = self.config['vision_models'][model_type]['model_list']
     
     @classmethod
     def INPUT_TYPES(cls):
         """定义节点输入类型"""
         config = cls._load_config_static()
-        vision_models = config['chatllmleoleexh']['vision_models']
+        vision_models = config['vision_models']
         
         # 获取所有模型类型
         model_types = list(vision_models.keys())
@@ -45,22 +47,19 @@ class LLMs_Vision_Unified:
     
     @classmethod
     def _load_config_static(cls):
-        """静态方法加载配置"""
-        config_path = os.path.join(folder_paths.base_path, "custom_nodes", "ComfyUI-LLMs", "settings.yaml")
-        if not os.path.exists(config_path):
+        """静态方法加载配置 - 使用统一的配置加载函数"""
+        try:
+            return load_settings()
+        except Exception:
+            # 如果加载失败，返回默认配置
             return {
-                "chatllmleoleexh": {
-                    "vision_models": {
-                        "openai": {"model_list": ["gpt-4-vision-preview"]},
-                        "glm4": {"model_list": ["glm-4v"]},
-                        "ali": {"model_list": ["qwen-vl-plus"]},
-                        "gemini": {"model_list": ["gemini-pro-vision"]}
-                    }
+                "vision_models": {
+                    "openai": {"model_list": ["gpt-4-vision-preview"]},
+                    "glm4": {"model_list": ["glm-4v"]},
+                    "ali": {"model_list": ["qwen-vl-plus"]},
+                    "gemini": {"model_list": ["gemini-pro-vision"]}
                 }
             }
-            
-        with open(config_path, 'r', encoding='utf-8') as f:
-            return yaml.safe_load(f)
     
     RETURN_TYPES = ("STRING",)
     FUNCTION = "process_image"
@@ -73,7 +72,7 @@ class LLMs_Vision_Unified:
     def _get_vision_config(self, model_type):
         """获取指定视觉模型的配置"""
         try:
-            return self.config['chatllmleoleexh']['vision_models'][model_type]
+            return self.config['vision_models'][model_type]
         except KeyError:
             raise ValueError(f"未找到模型类型 {model_type} 的配置")
     

@@ -44,6 +44,20 @@ cp settings.yaml.sample settings.yaml
 
 2. Edit `settings.yaml` to configure your API keys and model settings
 
+### Configuration Validation
+
+After setting up your configuration, you can use the validation tool to check if everything is configured correctly:
+
+```bash
+python validate_config.py
+```
+
+This tool will:
+- ✅ Check if `settings.yaml` exists
+- ✅ Validate configuration file structure
+- ✅ Display current API endpoints and model configurations
+- ⚠️ Warn about default API keys that need to be updated
+
 ### Detailed Configuration
 
 The configuration file structure is as follows:
@@ -196,6 +210,20 @@ cp settings.yaml.sample settings.yaml
 
 2. 编辑 `settings.yaml` 文件，配置您的API密钥和模型设置
 
+### Configuration Validation
+
+After setting up your configuration, you can use the validation tool to check if everything is configured correctly:
+
+```bash
+python validate_config.py
+```
+
+This tool will:
+- ✅ Check if `settings.yaml` exists
+- ✅ Validate configuration file structure
+- ✅ Display current API endpoints and model configurations
+- ⚠️ Warn about default API keys that need to be updated
+
 ### 详细配置说明
 
 配置文件结构如下：
@@ -279,7 +307,7 @@ chatllmleoleexh:
 
 ### 图像理解功能
 1. 在节点列表中找到 `🎯 LLMs Vision | 图像理解`
-2. 选择���使用的视觉模型
+2. 选择使用的视觉模型
 3. 连接图像输入
 4. 运行获取图像描述
 
