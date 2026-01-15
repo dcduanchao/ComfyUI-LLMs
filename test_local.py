@@ -8,6 +8,8 @@ import json
 import os
 import sys
 
+from . import settings
+
 # 添加当前目录到 Python 路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -17,7 +19,7 @@ from PIL import Image
 import io
 
 # 导入本地模块
-import settings
+
 from xai_client import complete_xai
 
 
