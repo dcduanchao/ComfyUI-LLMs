@@ -61,7 +61,7 @@ def complete_xai(api_key: str, model: str, temperature: float, top_p: float,
         payload["temperature"] = temperature
     if top_p is not None:
         payload["top_p"] = top_p
-
+    print(url)
     print(json.dumps(payload, ensure_ascii=False))
 
     # 发送请求
