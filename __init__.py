@@ -7,11 +7,11 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "LLMs Chat": "🤖 LLMs Chat | 智能对话",
-    "LLMs Vision Unified": "🎯 LLMs Vision | 图像理解"
+    "LLMs Chat": "🤖 Grok Chat | 智能对话",
+    "LLMs Vision Unified": "🎯 Grok Vision | 图像理解"
 }
 
 NODE_DISPLAY_CATEGORY_MAPPINGS = {
-    "LLMs Chat": "🌟 LLMs",
-    "LLMs Vision Unified": "🎭 LLMs"
+    "LLMs Chat": "🚀 xAI",
+    "LLMs Vision Unified": "🚀 xAI"
 }

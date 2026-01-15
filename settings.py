@@ -1,42 +1,69 @@
 import os
-import pathlib
 import yaml
+import pathlib
 
 DEFAULT_SETTINGS = {
     "chatllmleoleexh": {
         "openai_compatible": {
             "default": {
-                "api_base": "http://url:3200/v1",
-                "organisation": "NONE",
-                "api_key": "sk-xxxxxxx",
-                "model": ["gpt-3.5-turbo"]
+                "api_key": "your-xai-api-key",
+                "model": [
+                    "grok-4-0709",
+                    "grok-4",
+                    "grok-3",
+                    "grok-3-mini",
+                    "grok-3-fast",
+                    "grok-2-vision-1212",
+                    "grok-4-1-fast-non-reasoning",
+                    "grok-4-1-fast-reasoning",
+                    "grok-4-fast-non-reasoning",
+                    "grok-4-fast-reasoning"
+                ]
             }
         },
         "vision_models": {
-            "openai": {
-                "api_key": "sk-xxxxxxx",
-                "api_base": "http://url:3200/v1",
-                "model_list": ["gpt-4-vision-preview"]
-            },
-            "glm4": {
-                "api_key": "xxxxxx",
-                "model_list": ["glm-4v"]
-            },
-            "ali": {
-                "api_key": "sk-xxxxx",
-                "model_list": ["qwen-vl-plus"]
-            },
-            "gemini": {
-                "api_key": "AIxxxxxx",
-                "model_list": ["gemini-pro-vision"]
+            "xai": {
+                "api_key": "your-xai-api-key",
+                "model_list": [
+                    "grok-4-0709",
+                    "grok-4",
+                    "grok-3",
+                    "grok-3-mini",
+                    "grok-3-fast",
+                    "grok-2-vision-1212",
+                    "grok-4-1-fast-non-reasoning",
+                    "grok-4-1-fast-reasoning",
+                    "grok-4-fast-non-reasoning",
+                    "grok-4-fast-reasoning"
+                ]
             }
         },
         "example_user_prompt": "your user prompt here",
         "prompt_templates": {
             "default": {
-                "system": "act as prompt generator, I will give you text and you describe an image that matches that text in details, answer with one response only.if I input in Chinese to communicate with you, but it is crucial that your response be in English.",
-                "prefix": "make a list of the things you see. do not explain why you see them.",
-                "suffix": "describe what you see in your mind."
+                "system": "You are Grok, a highly intelligent, helpful AI assistant.",
+                "prefix": "",
+                "suffix": ""
+            },
+            "image_generator": {
+                "system": "You are an expert image prompt generator. Convert text descriptions into detailed, high-quality image prompts suitable for AI image generation models.",
+                "prefix": "Create a detailed image prompt for: ",
+                "suffix": " - Include specific details about style, lighting, colors, composition, and mood."
+            },
+            "creative_writer": {
+                "system": "You are a creative writing assistant. Help generate engaging stories, vivid descriptions, and compelling narratives.",
+                "prefix": "Write about: ",
+                "suffix": ""
+            },
+            "code_assistant": {
+                "system": "You are an expert programmer. Help write, debug, and explain code in various programming languages. Provide clear, well-commented code examples when appropriate.",
+                "prefix": "",
+                "suffix": ""
+            },
+            "chinese_assistant": {
+                "system": "你是一个有用的中文助手。请用中文回答用户的问题，提供准确、详细的信息。",
+                "prefix": "",
+                "suffix": ""
             }
         }
     }
@@ -65,9 +92,3 @@ def get_vision_settings(model_type: str):
     """获取视觉模型配置"""
     settings = load_settings()
     return settings['vision_models'].get(model_type)
-
-
-def api_settings(section: str = "default"):
-    """保持向后兼容的API设置获取函数"""
-    settings = get_chat_settings(section)
-    return settings['api_base'], settings['api_key'], settings['organisation']
