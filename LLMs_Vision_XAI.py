@@ -47,6 +47,7 @@ def process_xai(encoded_image, prompt, config):
             "max_tokens": 4096
         }
         # print(json.dumps(payload, ensure_ascii=False))
+        print("识别开始")
         # 发送请求
         response = requests.post(url, headers=headers, json=payload, timeout=3600)
         print(response.text)
