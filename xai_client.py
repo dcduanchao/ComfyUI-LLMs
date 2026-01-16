@@ -3,7 +3,7 @@ import json
 import os
 
 # 导入 settings 模块
-from . import settings
+
 
 
 def complete_xai(api_key: str, model: str, temperature: float, top_p: float,
