@@ -1,1 +1,4 @@
+pillow
+numpy
+torch
 requests>=2.31.0

@@ -8,7 +8,7 @@ import json
 import os
 import sys
 
-from . import settings
+import settings
 
 # 添加当前目录到 Python 路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -117,6 +117,68 @@ def test_chat():
 
         print(f"\n{'='*60}")
         print("✅ 聊天功能测试完成")
+        print(f"{'='*60}\n")
+
+    except Exception as e:
+        print(f"\n❌ 测试失败: {str(e)}")
+        import traceback
+        traceback.print_exc()
+
+
+def test_vision_unified():
+    """测试 LLMs_Vision_Unified 节点"""
+    print("\n" + "="*60)
+    print("🎯 测试 LLMs_Vision_Unified 节点")
+    print("="*60)
+
+    try:
+        # 检查是否有测试图片
+        test_image_path = "C:\\Users\\admin\\Desktop\\1111.jpg"
+        if not os.path.exists(test_image_path):
+            print(f"\n⚠️  未找到测试图片: {test_image_path}")
+            print("   跳过视觉测试")
+            return
+
+        print(f"\n📸 测试图片: {test_image_path}")
+
+        # 直接使用 base64 编码的图像，不依赖 torch
+        import base64
+
+        with open(test_image_path, 'rb') as f:
+            image_data = f.read()
+        encoded_image = base64.b64encode(image_data).decode()
+
+        print(f"   图片已编码为 base64")
+
+        # 测试参数
+        model_type = "xai"
+        model = "grok-4-0709"
+        prompt = "请详细描述这张图片的内容，包括主要对象、环境、颜色、光影和整体氛围"
+
+        print(f"\n📝 测试参数:")
+        print(f"   - 模型类型: {model_type}")
+        print(f"   - 模型: {model}")
+        print(f"   - 提示词: {prompt}")
+
+        print(f"\n⏳ 正在调用 xAI 视觉 API...")
+
+        # 直接调用 xAI 视觉处理函数
+        from LLMs_Vision_XAI import process_xai
+
+        vision_config = settings.get_vision_settings('xai')
+        vision_config['model_list'] = [model]
+
+        result = process_xai(
+            encoded_image=encoded_image,
+            prompt=prompt,
+            config=vision_config
+        )
+
+        print(f"\n✅ 图片描述:")
+        print(f"   {result[:500]}..." if len(result) > 500 else f"   {result}")
+
+        print(f"\n{'='*60}")
+        print("✅ LLMs_Vision_Unified 节点测试完成")
         print(f"{'='*60}\n")
 
     except Exception as e:
@@ -250,23 +312,27 @@ def main():
 
     # 菜单
     print("\n请选择测试项目:")
-    print("1. 测试聊天功能")
-    print("2. 测试视觉功能")
-    print("3. 测试不同参数")
-    print("4. 运行所有测试")
+    print("1. 测试聊天功能 (使用配置文件中的模板)")
+    print("2. 测试视觉功能 (直接 API 调用)")
+    print("3. 测试 LLMs_Vision_Unified 节点")
+    print("4. 测试不同参数")
+    print("5. 运行所有测试")
     print("0. 退出")
 
-    choice = input("\n请输入选项 (0-4): ").strip()
+    choice = input("\n请输入选项 (0-5): ").strip()
 
     if choice == "1":
         test_chat()
     elif choice == "2":
         test_vision()
     elif choice == "3":
-        test_parameters()
+        test_vision_unified()
     elif choice == "4":
+        test_parameters()
+    elif choice == "5":
         test_chat()
         test_vision()
+        test_vision_unified()
         test_parameters()
     elif choice == "0":
         print("\n👋 退出测试")

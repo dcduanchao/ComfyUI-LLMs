@@ -1,7 +1,6 @@
+import json
+
 import requests
-import base64
-from io import BytesIO
-from PIL import Image
 
 
 def process_xai(encoded_image, prompt, config):
@@ -29,13 +28,12 @@ def process_xai(encoded_image, prompt, config):
                 "role": "user",
                 "content": [
                     {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/png;base64,{encoded_image}"
-                        }
+                        "type": "input_image",
+                        "image_url": f"data:image/jpeg;base64,{encoded_image}",
+                        "detail": "high"
                     },
                     {
-                        "type": "text",
+                        "type": "input_text",
                         "text": prompt
                     }
                 ]
@@ -48,9 +46,10 @@ def process_xai(encoded_image, prompt, config):
             "model": config['model_list'][0],
             "max_tokens": 4096
         }
-
+        # print(json.dumps(payload, ensure_ascii=False))
         # 发送请求
         response = requests.post(url, headers=headers, json=payload, timeout=3600)
+        print(response.text)
 
         # 检查响应
         if response.status_code != 200:
@@ -60,11 +59,15 @@ def process_xai(encoded_image, prompt, config):
         result = response.json()
 
         # 提取响应内容
-        if 'output' in result and 'choices' in result['output'] and len(result['output']['choices']) > 0:
-            content = result['output']['choices'][0]['message']['content']
-            return content
-        else:
-            return f"xAI Grok 视觉处理出错: 无法解析响应 - {str(result)}"
+        # xAI 视觉 API 响应格式: output[0].content[0].text
+        if 'output' in result and len(result['output']) > 0:
+            output_item = result['output'][0]
+            if 'content' in output_item and len(output_item['content']) > 0:
+                content_item = output_item['content'][0]
+                if 'text' in content_item:
+                    return content_item['text']
+
+        return f"xAI Grok 视觉处理出错: 无法解析响应 - {str(result)}"
 
     except Exception as e:
         return f"xAI Grok 视觉处理出错: {str(e)}"
